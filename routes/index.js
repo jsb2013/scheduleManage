@@ -12,13 +12,13 @@ exports.login = function(req, res){
 exports.loginpost = function(request, response){
     var pg = require('pg');
     var connectionString = process.env.DATABASE_URL
-        || "tcp://postgres:hisashiE82@localhost:5432/postgres";
+        || "tcp://postgres:postgres@localhost:5432/postgres";
         
-    var name = request.body.name;
+    var name = request.body.username;
     var pass = request.body.password;
     
     pg.connect(connectionString, function(err, client) {
-        var query = client.query('select * from user_account where user_name = $1 and password = $2', [name, pass]);
+        var query = client.query('select * from user_account where user_id = $1 and password = $2', [name, pass]);
         var rows = [];
         
         query.on('row', function(row) {
@@ -26,7 +26,7 @@ exports.loginpost = function(request, response){
         });
         
         query.on('end', function(row,err) {
-            if (rows.length === 0){
+            if (rows.length == 0){
                 response.render('index_org3', { 
                 title: 'Express',
                 data:rows
@@ -54,7 +54,14 @@ exports.loginpost = function(request, response){
 };
 
 exports.create = function(req, res){
+if(req.session.user === undefined){
+	res.render('index_org2', { 
+                title: 'Express'
+            });
+            } else {
+            console.log(req.session.user.name);
   res.render('create', { title: 'Express' });
+  }
 };
 
 exports.createpost = function(request, response){

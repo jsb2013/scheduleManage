@@ -1,31 +1,56 @@
 <html>
 <head>
-<title>ãƒ¦ãƒ¼ã‚¶ç™»éŒ²</title>
+<title>ƒƒOƒCƒ“‰æ–Ê</title>
+
+<style>
+	p { font: 11pt Meiryo;}
+	p#error { font: 15pt Meiryo; color: white;}
+	h2 { font : 25pt Meiryo; margin: 40px 0px 0px 0px; }
+	div.main {	margin: 0 auto; padding: 20px 20px 10px 20px; border: solid 5px orange; width: 500px; border-radius: 10pt }
+	input { margin: 10px; font: 12pt Meiryo; border-radius: 4pt; height: 40px; size:10;}
+	button { font: 13pt Meiryo; border-radius: 5pt; background: orange; width: 200px;}
+	table.main { margin 100px;}
+	div.footer { margin: 30px auto;}
+	#test { font-size: 150%;}
+</style>
+	
 </head>
 <body>
-<div align="center" class="body">
-<h2>ãƒ¦ãƒ¼ã‚¶ç™»éŒ²</h2>
-<form method="post" action="/create">
-	<table>
-		<tr height="40px">
-			<td>ãƒ¦ãƒ¼ã‚¶ãƒ¼ID</td>
-			<td><input type="text" name="username"/></td>
-		</tr>
-		<tr height="40px">
-			<td>ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰</td>
-			<td><input type="password" name="password"/></td>
-		</tr>
-	</table>
-	<table>
-		<tr>
-			<td align="center"><input type="submit" value="ãƒ­ã‚°ã‚¤ãƒ³"></td>
-			<td align="center"><input type="reset" value="ãƒªã‚»ãƒƒãƒˆ"></td>
-		</tr>
-	</table>
-</form>
-
-<a href="/login">ãƒ­ã‚°ã‚¤ãƒ³ç”»é¢ã«ç§»å‹•</a>
-
+<div align="center" class="head">
+<h2>ƒ†[ƒU“o˜^‰æ–Ê</h2>
+</div>
+<div align="center">
+	<p id="error">ƒ†[ƒUIDAá‚µ‚­‚ÍƒpƒXƒ[ƒh‚ªŒë‚Á‚Ä‚¢‚Ü‚·</p>
+</div>
+<div align="center" class="main">
+	<form method="post" action="/login">
+		<table>
+			<tr height="40px">
+				<td><p>ƒ†[ƒUID</p></td>
+				<td><input type="text" name="userid" placeholder="‚²Šó–]‚Ìƒ†[ƒUID‚ğ“o˜^‰º‚³‚¢B" required aria-required="true"/></td>
+			</tr>
+				<tr height="40px">
+				<td><p>‚¨–¼‘O</p></td>
+				<td><input type="text" name="name" placeholder="‚¨–¼‘O‚ğ‚²‹L“ü‰º‚³‚¢B" required aria-required="true"/></td>
+			</tr>
+			<tr height="40px">
+				<td><p>ƒpƒXƒ[ƒh</p></td>
+				<td><input type="password" name="password" placeholder="ƒpƒXƒ[ƒh" required aria-required="true"/></td>
+			</tr>
+			<tr height="40px">
+				<td><p>ƒpƒXƒ[ƒh(Šm”F—p)</p></td>
+				<td><input type="password" name="password2" placeholder="ƒpƒXƒ[ƒh(Šm”F—p)"/></td>
+			</tr>
+		</table>
+		<table>
+			<tr height="30px 0px 0px 0px">
+				<td align="center"><button type="submit">V‹K“o˜^‚·‚é</button></td>
+			</tr>
+		</table>
+	</form>
+</div>
+<div align="center" id="test">
+	<a href="/login">ƒƒOƒCƒ“‰æ–Ê‚É–ß‚é</a>
 </div>
 </body>
 </html>

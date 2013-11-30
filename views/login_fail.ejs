@@ -3,7 +3,7 @@
 <title>ログイン画面</title>
 
 <style>
-	p { font: 15pt Meiryo; color: white;}
+	p { font: 15pt Meiryo; color: red;}
 	h2 { font : 25pt Meiryo; margin: 40px; }
 	div.main {	margin: 0 auto; padding: 20px 20px 10px 20px; border: solid 5px orange; width: 500px; border-radius: 10pt }
 	input { margin: 10px; font: 12pt Meiryo; border-radius: 4pt; height: 40px; size:10;}
@@ -19,14 +19,11 @@
 <h2>ログイン画面</h2>
 </div>
 <div align="center">
-	<p>ユーザID、若しくはパスワードが誤っています</p>
+	<p>※ユーザID、若しくはパスワードが誤っています</p>
 </div>
 <div align="center" class="main">
 	<form method="post" action="/login">
 		<table>
-			<tr height="40px">
-				<td align="center"><img src="login_photo.png" alt="ログインキャラ"></td>
-			</tr>	
 			<tr height="40px">
 				<td><input type="text" name="userid" placeholder="ユーザID"	/></td>
 			</tr>	
