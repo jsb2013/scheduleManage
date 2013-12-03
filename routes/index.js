@@ -3,114 +3,113 @@
  * GET home page.
  */
 
-// ログイン表示
+var waitScheduleDao = require("../dao/waitScheduleDao");
+var users = require("../models/users");
+var config = require("./common_config");
+
+// 1.ログイン画面（get:/login）
 exports.login = function(req, res){
   res.render('login', {});
 };
 
-// ログイン表示　→　
-exports.loginpost = function(request, response){
-    var pg = require('pg');
-    var connectionString = process.env.DATABASE_URL
-        || "tcp://postgres:postgres@localhost:5432/postgres";
-        
-    var name = request.body.username;
-    var pass = request.body.password;
+// 2.ログイン画面（post:/login）
+exports.loginpost = function(req, res){
+    var userid = req.body.userid;
+    var password = req.body.password;
     
-    pg.connect(connectionString, function(err, client) {
-        var query = client.query('select * from user_account where user_id = $1 and password = $2', [name, pass]);
-        var rows = [];
-        
-        query.on('row', function(row) {
-            rows.push(row);
-        });
-        
-        query.on('end', function(row,err) {
-            if (rows.length == 0){
-                response.render('index_org3', { 
-                title: 'Express',
-                data:rows
-                });
-            } else {
-                response.render('index_org2', { 
-                title: 'Express',
-                data:rows
+    function authCallback(err, userInfo){
+        // 認証に失敗
+        if (err || userInfo === null) {
+            res.render('login', {
+                error: 100,
+                loginFailed: true
             });
-            }
-            request.session.user = {
-                name: name,
-                pass: pass
-            };
-        });
+            return;
+        }
         
-        query.on('error', function(error) {
-            console.log("ERROR!!" + error);
-            response.render('index_org2', {
-                data: null,
-                message: "ERROR is occured!"
-            });
-        });
-    });
+        // 認証に成功
+        req.session.user = {
+            userid: userInfo.user_id,
+            username: userInfo.user_name
+        };
+        // メイン画面へ推移
+        res.redirect('/main');
+        return;
+    }
+    users.authenticate(userid, password, authCallback);
 };
 
-exports.create = function(req, res){
-if(req.session.user === undefined){
-	res.render('index_org2', { 
-                title: 'Express'
+// 3.メイン画面遷移（get:/main）
+exports.main = function(req, res){
+    if (req.session.user === undefined){
+        res.redirect("/login");
+        return;
+    }
+    
+    var userid = req.session.userid;
+    var username = req.session.username;
+    function authCallback(err, schdInfoList){
+        // 認証に失敗
+        // 本当は別の画面を用意したい！（最後に見直す）
+        if (err) {
+            res.render('login', {
+                error: 200,
+                loginFailed: true
             });
-            } else {
-            console.log(req.session.user.name);
-  res.render('create', { title: 'Express' });
-  }
+            return;
+        }
+        // メイン画面へ推移
+        res.render('main', {
+            schdInfoList: schdInfoList,
+            perTime: config.perTime,
+            username: username
+        });
+        return;
+    }
+    waitScheduleDao.getWaitScheduleByuserIdAndWait(userid, authCallback);
 };
 
-exports.createpost = function(request, response){
-    var pg = require('pg');
-    var connectionString = process.env.DATABASE_URL
-        || "tcp://postgres:hisashiE82@localhost:5432/postgres";
-        
-    var name = request.body.username;
-    var pass = request.body.password;
-    
-    pg.connect(connectionString, function(err, client) {
-        var query = client.query('INSERT INTO user_account(user_id, user_name, password, postcode, address, email, job, birthday) values ( $1, \'a\', $2, \'a\', \'a\', \'a\', \'a\', \'20130101\')',
-         [name, pass], function(err, result){
-            if (err){
-                console.log("error. test.");
-            }else{
-                // ���[�U�ꗗ���ʂ��\�������B
-                response.redirect('/display_all');
-            }
-        });
-    });
+// 4.ユーザ情報登録画面（get:/create）
+exports.createSuccess = function(req, res) {
+    if (req.session.user === undefined){
+        res.redirect("/login");
+        return;
+    }
+    // ログイン成功画面へ推移
+    res.render('create', {});
+    return;
 };
 
-exports.display = function(req, res){
-    var pg = require('pg');
-    var connectionString = process.env.DATABASE_URL
-        || "tcp://postgres:hisashiE82@localhost:5432/postgres";
-        
-    var name = req.body.name;
-    var pass = req.body.password;
+// 5.ユーザ情報登録成功画面への推移（post:/create）
+exports.createSuccess = function(req, res) {
+    if (req.session.user === undefined){
+        res.redirect("/login");
+        return;
+    }
     
-    pg.connect(connectionString, function(err, client) {
-        var query = client.query('select * from user_account');
-        var rows = [];
-        query.on('row', function(row) {
-            rows.push(row);
-        });
-        query.on('end', function(row,err) {
-                res.render('display_all', { 
-                title: 'Express',
-                data:rows
-                });
+    var userid = req.body.userid;
+    var username = req.body.username;
+    var password = req.body.password;
+    
+    function authCallback(err){
+        // 認証に失敗
+        // 本当は別の画面を用意したい！（最後に見直す）
+        if (err) {
+            res.render('login', {
+                error: 200,
+                loginFailed: true
             });
-        query.on('error', function(error) {
-            console.log("ERROR!!" + error);
-                res.render('index_org2', {
-                data: null,
-                message: "ERROR is occured!"
-            });
-        });
-    });
+            return;
+        }
+        // 認証に成功
+        req.session.user = {
+            userid: userid,
+            username: username
+        };
+    
+        // ログイン成功画面へ推移
+        res.render('create_success', {});
+        return;
+    }
+    users.insertUserAccount(userid, username, password, authCallback);
 };

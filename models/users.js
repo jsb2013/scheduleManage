@@ -1,35 +1,60 @@
-// Copyright (c) 2012, Hiromichi Matsushima <hylom@users.sourceforge.jp>
-// All rights reserved.
-// This file is released under New BSD License.
-
+/*
+ * ユーザ待ちステータステーブルに
+ * アクセスする為のクラス
+ */
 var crypto = require('crypto');
-var database = require('./database');
-var db = database.createClient();
-var users = exports;
+var pg = require('pg');
+var config = require("./common_config");
+var connectionString = config.connectionString;
 
-// 認証を行う
-users.authenticate = function (name, password, callback) {
-  db.query('SELECT * FROM users WHERE name = ?',
-	     [name,], queryCallback);
-  function queryCallback(err, results, fields) {
-    db.end();
-    if (err) {
-      callback(err);
-      return;
-    }
-    if (results && (results.length > 0)) {
-      userInfo = results[0];
-      if (userInfo.password == _hashPassword(password)) {
-	delete userInfo.password;
-	callback(null, userInfo);
-	return;
-      }
-    }
-    // 該当ユーザー無し
-    callback(err, null);
-    return;
-  }
-}
+/* ログイン処理 */
+exports.authenticate = function(userid, password, callback) {
+    pg.connect(connectionString, function(err, client) {
+        var query = client.query('select * from user_account where user_id = $1', [userid]);
+        var rows = [];
+        
+        query.on('row', function(row) {
+            rows.push(row);
+        });
+        
+        query.on('end', function(row,err) {
+            // エラーが発生した場合
+            if (err){
+                callback(err, null);
+                return;
+            }
+            // ユーザが存在する場合
+            if (rows.length > 0) {
+                var userinfo = rows[0];
+                if (userinfo.password == _hashPassword(password)) {
+                    delete userinfo.password;
+                    callback(err, userinfo);
+                    return;
+                }
+            }
+            // ユーザが存在しない場合
+            // (想定)画面入力されたUSERIDが登録されていない場合
+            // (想定)画面入力されたPASSWORDが誤っている場合
+            callback(err, null);
+            return;
+        });
+    });
+};
+
+/* ユーザ登録 */
+exports.insertUserAccount = function(userid, username, password, callback) {
+    // パスワードは必ず値が設定されている前提（Clientサイドでチェック済）
+    var hashedPassword = _hashPassword(password);
+    pg.connect(connectionString, function(err, client) {
+        client.query('INSERT INTO user_account(user_id, user_name, password, postcode, address, email, job, birthday) values ( $1, $2, $3, \'\', \'\', \'\', \'\', now())', [userid, username, hashedPassword], function(err, result){
+            if (err){
+                callback(err);
+            }else{
+                callback(false);
+            }
+        });
+    });    
+};
 
 // パスワードのハッシュを作成する
 function _hashPassword(password) {
@@ -40,23 +65,9 @@ function _hashPassword(password) {
   shasum.update(password);
   return shasum.digest('hex');
 }
-  
+
 // ユーザーを作成する
-users.createUser = function (name, password, callback) {
+createUser = function (password) {
   var hashedPassword = _hashPassword(password);
-  db.query(
-    'INSERT INTO users '
-      + '(uid,  name, password) '
-      + 'VALUES '
-      + '(NULL, ?,    ?)'
-      + ';',
-    [name, hashedPassword],
-    function (err, results, fields) {
-      db.end();
-      var sid = results.insertId;
-      if (err) {
-        callback(new Error('Insert failed.'));
-      }
-      callback(null, sid);
-    });
-}
+  // TBA
+};

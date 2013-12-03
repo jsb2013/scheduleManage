@@ -1,10 +1,10 @@
 <html>
 <head>
-<title>ƒƒOƒCƒ“‰æ–Ê</title>
+<title>ãƒ­ã‚°ã‚¤ãƒ³ç”»é¢</title>
 
 <style>
-	p { font: 15pt Meiryo; color: white;}
-	h2 { font : 25pt Meiryo; margin: 40px; }
+    p { font: 15pt Meiryo; color: red;}
+    h2 { font : 25pt Meiryo; margin: 40px; }
 	div.main {	margin: 0 auto; padding: 20px 20px 10px 20px; border: solid 5px orange; width: 500px; border-radius: 10pt }
 	input { margin: 10px; font: 12pt Meiryo; border-radius: 4pt; height: 40px; size:10;}
 	button { font: 13pt Meiryo; border-radius: 5pt; background: orange; width: 200px;}
@@ -16,33 +16,37 @@
 </head>
 <body>
 <div align="center" class="head">
-<h2>ƒƒOƒCƒ“‰æ–Ê</h2>
+<h2>ãƒ­ã‚°ã‚¤ãƒ³ç”»é¢</h2>
 </div>
 <div align="center">
-	<p>ƒ†[ƒUIDAá‚µ‚­‚ÍƒpƒXƒ[ƒh‚ªŒë‚Á‚Ä‚¢‚Ü‚·</p>
+    <% if (loginFailed){ %><br>
+        <% <p>ãƒ¦ãƒ¼ã‚¶IDã€è‹¥ã—ãã¯ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒèª¤ã£ã¦ã„ã¾ã™</p> %><br>
+    <% }else { %><br>
+        <% <p></p> %><br>
+    <% }%><br>
 </div>
 <div align="center" class="main">
 	<form method="post" action="/login">
 		<table>
 			<tr height="40px">
-				<td align="center"><img src="login_photo.png" alt="ƒƒOƒCƒ“ƒLƒƒƒ‰"></td>
+				<td align="center"><img src="login_photo.png" alt="ãƒ­ã‚°ã‚¤ãƒ³ã‚­ãƒ£ãƒ©"></td>
 			</tr>	
 			<tr height="40px">
-				<td><input type="text" name="userid" placeholder="ƒ†[ƒUID"	/></td>
+				<td><input type="text" name="userid" placeholder="ãƒ¦ãƒ¼ã‚¶ID"	/></td>
 			</tr>	
 			<tr height="40px">
-				<td><input type="password" name="password" placeholder="ƒpƒXƒ[ƒh"/></td>
+				<td><input type="password" name="password" placeholder="ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰"/></td>
 			</tr>
 		</table>
 		<table>
 			<tr height="30px 0px 0px 0px">
-				<td align="center"><button type="submit">ƒƒOƒCƒ“‚·‚é</button></td>
+				<td align="center"><button type="submit">ãƒ­ã‚°ã‚¤ãƒ³ã™ã‚‹</button></td>
 			</tr>
 		</table>
 	</form>
 </div>
 <div align="center" id="test">
-	<a href="/create">ƒ†[ƒUID‚ğV‹K“o˜^‚·‚é</a>
+	<a href="/create">ãƒ¦ãƒ¼ã‚¶IDã‚’æ–°è¦ç™»éŒ²ã™ã‚‹</a>
 </div>
 </body>
 </html>

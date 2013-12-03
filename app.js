@@ -8,8 +8,6 @@ var routes = require('./routes');
 //var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
-var MemcachedStore = require('connect-memcached')(express);
-
 var app = express();
 
 // all environments
@@ -34,15 +32,26 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+//***************************************
+//********* ルート情報 ******************
+//***************************************
+
 app.get('/', routes.display);
+// 1.ログイン画面
 app.get('/login', routes.login);
 app.post('/login', routes.loginpost);
+//app.get('/login_fail', routes.loginfail);
 
+// 2.ユーザ登録画面
 app.get('/create', routes.create);
 app.post('/create', routes.createpost);
+app.get('/create_success', routes.createsuccess);
 
-//app.get('/users', user.list);
-app.get('/display_all', routes.display);
+// 3.メイン画面（ログイン後）
+app.get('/main', routes.main);
+
+//***************************************
+//***************************************
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
