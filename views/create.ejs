@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>���O�C������</title>
+<title>ユーザ新規登録</title>
 
 <style>
 	p { font: 11pt Meiryo;}
@@ -17,40 +17,40 @@
 </head>
 <body>
 <div align="center" class="head">
-<h2>���[�U�o�^����</h2>
+<h2>ユーザ新規登録</h2>
 </div>
 <div align="center">
-	<p id="error">���[�UID�A�Ⴕ���̓p�X���[�h�������Ă��܂�</p>
+	<p></p>
 </div>
 <div align="center" class="main">
-	<form method="post" action="/login">
+	<form method="post" action="/create">
 		<table>
 			<tr height="40px">
-				<td><p>���[�UID</p></td>
-				<td><input type="text" name="userid" placeholder="�����]�̃��[�UID���o�^�������B" required aria-required="true"/></td>
+				<td><p>ユーザID</p></td>
+				<td><input type="text" name="userid" placeholder="ユーザIDを入力して下さい" required aria-required="true"/></td>
 			</tr>
 				<tr height="40px">
-				<td><p>�����O</p></td>
-				<td><input type="text" name="username" placeholder="�����O�����L���������B" required aria-required="true"/></td>
+				<td><p>ユーザ名</p></td>
+				<td><input type="text" name="username" placeholder="ユーザ名を入力してください" required aria-required="true"/></td>
 			</tr>
 			<tr height="40px">
-				<td><p>�p�X���[�h</p></td>
-				<td><input type="password" name="password" placeholder="�p�X���[�h" required aria-required="true"/></td>
+				<td><p>パスワード</p></td>
+				<td><input type="password" name="password" placeholder="パスワードを入力して下さい" required aria-required="true"/></td>
 			</tr>
 			<tr height="40px">
-				<td><p>�p�X���[�h(�m�F�p)</p></td>
-				<td><input type="password" name="password2" placeholder="�p�X���[�h(�m�F�p)"/></td>
+				<td><p>パスワード(確認用)
+				<td><input type="password" name="password2" placeholder="パスワードを入力して下さい(確認用)"/></td>
 			</tr>
 		</table>
 		<table>
 			<tr height="30px 0px 0px 0px">
-				<td align="center"><button type="submit">�V�K�o�^����</button></td>
+				<td align="center"><button type="submit">登録する</button></td>
 			</tr>
 		</table>
 	</form>
 </div>
 <div align="center" id="test">
-	<a href="/login">���O�C�����ʂɖ߂�</a>
+	<a href="/login">ログイン画面に戻る</a>
 </div>
 </body>
 </html>

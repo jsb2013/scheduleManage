@@ -20,16 +20,16 @@
 </div>
 <div align="center">
     <% if (loginFailed){ %><br>
-        <% <p>ユーザID、若しくはパスワードが誤っています</p> %><br>
+        <p>ユーザID、若しくはパスワードが誤っています</p><br>
     <% }else { %><br>
-        <% <p></p> %><br>
+        <p></p><br>
     <% }%><br>
 </div>
 <div align="center" class="main">
 	<form method="post" action="/login">
 		<table>
 			<tr height="40px">
-				<td align="center"><img src="login_photo.png" alt="ログインキャラ"></td>
+				<td align="center"><img src=".\img\login_photo.png" alt="ログインキャラ"></td>
 			</tr>	
 			<tr height="40px">
 				<td><input type="text" name="userid" placeholder="ユーザID"	/></td>

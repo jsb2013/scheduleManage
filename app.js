@@ -36,18 +36,16 @@ if ('development' == app.get('env')) {
 //********* ルート情報 ******************
 //***************************************
 
-app.get('/', routes.display);
 // 1.ログイン画面
 app.get('/login', routes.login);
 app.post('/login', routes.loginpost);
-//app.get('/login_fail', routes.loginfail);
 
 // 2.ユーザ登録画面
 app.get('/create', routes.create);
 app.post('/create', routes.createpost);
-app.get('/create_success', routes.createsuccess);
 
 // 3.メイン画面（ログイン後）
+app.get('/header', routes.header);
 app.get('/main', routes.main);
 
 //***************************************
