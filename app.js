@@ -5,10 +5,14 @@
 
 var express = require('express');
 var routes = require('./routes');
-//var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var app = express();
+
+// ログの設定
+var log4js = require('log4js');
+log4js.configure('./conf/log4js_setting.json', { reloadSecs: 5 });
+var logger = log4js.getLogger();
 
 // all environments
 app.configure(function(){
@@ -18,7 +22,8 @@ app.configure(function(){
    app.use(express.cookieParser("hogehoge"));
    app.use(express.session());
    app.use(express.favicon());
-   app.use(express.logger('dev'));
+   app.use(log4js.connectLogger(logger, { level: log4js.levels.INFO }));
+//   app.use(express.logger('dev'));
    app.use(express.bodyParser());
       app.use(app.router);
    app.use(express.json());

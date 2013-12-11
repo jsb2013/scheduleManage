@@ -13,26 +13,30 @@
 </script>
 </head>
 <BODY topmargin="0" leftmargin="0" marginwidth="0" marginheight="0">
-<IFRAME src="header.ejs" name="header" width="100%" height="60" scrolling="no"></IFRAME>
+<IFRAME src="/header" name="header" width="100%" height="60" scrolling="no"></IFRAME>
 <div class="title">
 	<%= username %>様の予約状況
 </div>
 <div align="center" class="head">
-    <% if(isUserid == false){ %>
+    <% if(!isRegist){ %>
     	<h2>現在登録中の予約はありません。</h2>
     <% } else { %>
-        <table>
+        <table border="1">
             <tr>
                 <td>待ち人数</td><td>想定待ち時間</td>
             </tr>
             <tr>
-                <td><%= schedInfoList.length %></td><%= schdInfoList.length * perTime %><td></td>
+                <td><%= schdInfo.waitNum %></td><td><%= schdInfo.waitTime %></td>
             </tr>
         </table>
     <% } %>
 </div>
 <div align="center">
-	<button type="submit"><a href="/login">予約する</a></button>
+    <% if(!isRegist){ %>
+	    <button type="submit"><a href="/regist">予約する</a></button>
+	<% } else { %>
+	    <button type="submit"><a href="/delete">予約を取り消す</a></button>
+	<% } %>
 </div>
 </body>
 </html>

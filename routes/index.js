@@ -4,14 +4,16 @@
  */
 
 var waitScheduleDao = require("../dao/waitScheduleDao");
-var users = require("../models/users");
+var userAccountDao = require("../dao/userAccountDao");
 var config = require("../conf/common_config");
+var log = require("../util/logger");
+var logger = log.createLogger();
 
 // 1.ログイン画面（get:/login）
 exports.login = function(req, res){
-  res.render('login', {
-                loginFailed: false
-            });
+    res.render('login', {
+        loginFailed: false
+    });
 };
 
 // 2.ログイン画面（post:/login）
@@ -20,10 +22,19 @@ exports.loginpost = function(req, res){
     var password = req.body.password;
     
     function authCallback(err, userInfo){
-        // 認証に失敗
-        if (err || userInfo === null) {
+        // システムエラー[TBA:システムエラー時の画面を用意する]
+        if (err) {
             res.render('login', {
                 error: 100,
+                loginFailed: true
+            });
+            return;
+        }
+        
+        // ユーザID若しくはパスワードに誤りあり
+        if (!userInfo) {
+            res.render('login', {
+                error: 200,
                 loginFailed: true
             });
             return;
@@ -35,10 +46,11 @@ exports.loginpost = function(req, res){
             username: userInfo.user_name
         };
         // メイン画面へ推移
+        logger.info('ILOGIN10', null, userInfo.user_id);
         res.redirect('/main');
         return;
     }
-    users.authenticate(userid, password, authCallback);
+    userAccountDao.authenticate(userid, password, authCallback);
 };
 
 // 3-1.メイン画面のヘッダー（get:/header）
@@ -57,7 +69,7 @@ exports.main = function(req, res){
     
     var userid = req.session.user.userid;
     var username = req.session.user.username;
-    function authCallback(err, isUserid, schdInfoList){
+    function authCallback(err, isRegist, schdInfo){
         // 認証に失敗
         // 本当は別の画面を用意したい！（最後に見直す）
         if (err) {
@@ -69,9 +81,8 @@ exports.main = function(req, res){
         }
         // メイン画面へ推移
         res.render('main', {
-            isUserid: isUserid,
-            schdInfoList: schdInfoList,
-            perTime: config.perTime,
+            isRegist: isRegist,
+            schdInfo: schdInfo,
             username: username
         });
         return;
@@ -112,5 +123,5 @@ exports.createpost = function(req, res) {
         res.render('create_success', {});
         return;
     }
-    users.insertUserAccount(userid, username, password, authCallback);
+    userAccountDao.insertUserAccount(userid, username, password, authCallback);
 };

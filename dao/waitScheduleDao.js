@@ -4,22 +4,24 @@
  */
 var database = require("./database");
 var client = database.createClient();
+var config = require("../conf/common_config");
 
 //　ユーザ&パスワードのチェックを行う。
 exports.getWaitScheduleInfo = function(userid, callback){
     
+    var schdInfo = {"waitNum":0, "waitTime":0};
     function callbackFirst(err, isUserid){
         if (err) {
             callback(err);
             return;
         }
         // ユーザが存在しない場合
-        if (isUserid === null){
-            callback(err, true, null);
+        if (!isUserid){
+            callback(err, false, schdInfo);
             return;
         }
         // ユーザが存在するので、順番情報を取得する。
-        getWaitScheduleByuserId(userid, callbackSecond);
+        getWaitScheduleByuserIdAndWait(userid, callbackSecond);
     }
     
     function callbackSecond(err, schdInfoList){
@@ -27,8 +29,11 @@ exports.getWaitScheduleInfo = function(userid, callback){
             callback(err);
             return;
         }
-        // ユーザが存在しない場合
-        callback(null, false, schdInfoList);
+        // 待ち情報を作成する。
+
+        schdInfo.waitNum = schdInfoList.length;
+        schdInfo.waitTime = schdInfo.waitNum * config.perTime;
+        callback(null, true, schdInfo);
     }
     
     getWaitScheduleByuserId(userid, callbackFirst);
@@ -50,16 +55,16 @@ function getWaitScheduleByuserId(userid, callback){
         }
         // ユーザがない場合
         if (rows.length === 0){
-            callback(false, null);
+            callback(err, false);
             return;
         }
         // エラーが発生しない場合
-        callback(false, rows);
+        callback(err, true);
         return;
     });
         
     query.on('error', function(error) {
-        var errorMsg = client.getErrorMsg(error);
+        var errorMsg = database.getErrorMsg(error);
         console.log(errorMsg);
         return;
     });
@@ -85,9 +90,8 @@ function getWaitScheduleByuserIdAndWait(userid, callback){
     });
     
     query.on('error', function(error) {
-        var errorMsg = client.getErrorMsg(error);
+        var errorMsg = database.getErrorMsg(error);
         console.log(errorMsg);
         return;
     });
 }
-        

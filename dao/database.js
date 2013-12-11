@@ -9,10 +9,12 @@ var Database = function () {};
 Database.prototype.dbAuth = config.connectionString;
 
 // MySQLクライアントオブジェクトを作成する
+// （コメントアウト）セッションを使いまわそうと思ったが、
+// 一度index.jsで振られると、中途半端にセッションが切れてるせいでエラーになるらしい。
 Database.prototype._getClient = function () {
-  if (this.client === undefined) {
+//  if (this.client === undefined) {
     this.client = new pg.Client(this.dbAuth);
-  }
+//  }
   return this.client;
 };
 
@@ -30,6 +32,7 @@ function createClient() {
 
 exports.createClient = createClient;
 
+// データベースエラーメッセージの変換
 exports.getErrorMsg = function(error){
     return sys.inspect(error);
 };
