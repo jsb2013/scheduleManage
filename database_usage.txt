@@ -1,0 +1,21 @@
+■以下2つのテーブルが必要です！
+
+CREATE TABLE wait_schedule
+(
+  user_id character varying(20) NOT NULL,
+  status character varying(2) NOT NULL,
+  register_time character varying(20)
+)
+
+CREATE TABLE user_account
+(
+  user_id character varying(20) NOT NULL,
+  user_name character varying(20),
+  password character varying(50),
+  postcode character varying(8),
+  address character varying(50),
+  email character varying(50),
+  job character varying(30),
+  birthday date,
+  CONSTRAINT user_account_pkey PRIMARY KEY (user_id)
+)
