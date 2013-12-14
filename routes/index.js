@@ -84,7 +84,7 @@ exports.main = function(req, res){
             isRegist: isRegist,
             schdInfo: schdInfo,
             username: username
-        });
+        }); 
         return;
     }
     waitScheduleDao.getWaitScheduleInfo(userid, authCallback);
@@ -125,3 +125,68 @@ exports.createpost = function(req, res) {
     }
     userAccountDao.insertUserAccount(userid, username, password, authCallback);
 };
+
+// 5.ユーザ情報登録成功画面への推移（get:/register）
+exports.register = function(req, res) {
+    if (req.session.user === undefined){
+        res.redirect("/login");
+        return;
+    }
+    var userid = req.session.user.userid;
+    
+    function authCallback(err){
+        // 認証に失敗
+        // 本当は別の画面を用意したい！（最後に見直す）
+        if (err) {
+            res.render('login', {
+                error: 200,
+                loginFailed: true
+            });
+            return;
+        }
+    
+        // ログイン成功画面へ推移
+        res.redirect('/main');
+        return;
+    }
+    waitScheduleDao.inserWaitSchedule(userid, authCallback);
+};
+
+// 5.ユーザ情報登録成功画面への推移（get:/delete）[TBA]こういうのは全部POSTにしないといけない。
+exports.delete = function(req, res) {
+    if (req.session.user === undefined){
+        res.redirect("/login");
+        return;
+    }
+    var userid = req.session.user.userid;
+    
+    function authCallback(err){
+        // 認証に失敗
+        // 本当は別の画面を用意したい！（最後に見直す）
+        if (err) {
+            res.render('login', {
+                error: 200,
+                loginFailed: true
+            });
+            return;
+        }
+    
+        // ログイン成功画面へ推移
+        res.redirect('/main');
+        return;
+    }
+    waitScheduleDao.updateStatusForWaitSchedule(userid, '4', authCallback);
+};
+
+// 5.ユーザ情報登録成功画面への推移（get:/delete）
+exports.logout = function(req, res) {
+    if (req.session.user === undefined){
+        res.redirect("/login");
+        return;
+    }
+    // セッションの破棄
+    req.session.destroy;
+    res.redirect("/login");
+    return;
+};
+

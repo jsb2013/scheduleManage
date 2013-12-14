@@ -11,7 +11,7 @@ var app = express();
 
 // ログの設定
 var log4js = require('log4js');
-log4js.configure('./conf/log4js_setting.json', { reloadSecs: 5 });
+log4js.configure('./conf/log4js_setting.json', { reloadSecs: 300 });
 var logger = log4js.getLogger();
 
 // all environments
@@ -52,6 +52,9 @@ app.post('/create', routes.createpost);
 // 3.メイン画面（ログイン後）
 app.get('/header', routes.header);
 app.get('/main', routes.main);
+app.get('/register', routes.register);
+app.get('/delete', routes.delete);
+app.get('/logout', routes.logout);
 
 //***************************************
 //***************************************
